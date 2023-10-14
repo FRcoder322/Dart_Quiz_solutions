@@ -1,0 +1,134 @@
+You are tasked with creating a bookstore inventory management system. Implement the following:
+
+Book Class:
+
+Create a Dart class called Book with the following properties:
+
+title (String): the title of the book.
+author (String): the author of the book.
+price (double): the price of the book.
+quantity (int): the quantity of the book in stock.
+Implement a  parameterized constructor to initialize the properties.
+
+Implement a method displayInfo() that prints the book's information in the following format:
+
+ 
+Title: [title]
+Author: [author]
+Price:  [price]
+Quantity in Stock: [quantity]
+Inventory Management:
+
+Create a list of Book objects representing the bookstore's inventory.
+Implement a function addBook(Book book) that adds a new book to the inventory.
+Implement a function removeBook(String title) that removes a book from the inventory based on its title.
+Implement a function displayInventory() that displays the information of all books in the inventory using the displayInfo() method of the Book class.
+Sales and Restocking:
+
+Implement a function sellBook(String title, int quantity) that simulates selling a certain quantity of a book. Update the quantity in stock accordingly.
+Implement a function restockBook(String title, int quantity) that simulates restocking a certain quantity of a book. Update the quantity in stock accordingly.
+
+
+
+SOLUTION:
+class Book {
+  String title;
+  String author;
+  double price;
+  int quantity;
+
+  // Constructor to initialize properties
+  Book(this.title, this.author, this.price, this.quantity);
+
+  // Method to display book information
+  void displayInfo() {
+    print('Title: $title');
+    print('Author: $author');
+    print('Price: \$${price.toStringAsFixed(2)}'); // Display price with 2 decimal places
+    print('Quantity in Stock: $quantity');
+  }
+}
+
+class InventoryManager {
+   // List to store Book objects
+  List<Book> inventory = []; 
+  
+
+  // Function to add a book to the inventory
+  void addBook(Book book) {
+    inventory.add(book);
+  }
+
+  // Function to remove a book from the inventory based on its title
+  void removeBook(String title) {
+    inventory.removeWhere((book) => book.title == title);
+  }
+
+  // Function to display information of all books in the inventory
+  void displayInventory() {
+    if (inventory.isEmpty) {
+      print('Inventory is empty.');
+    } else {
+      print('Inventory:');
+      for (var book in inventory) {
+        book.displayInfo();
+        print('-----------------------');
+      }
+    }
+  }
+
+  // Function to simulate selling a certain quantity of a book
+  void sellBook(String title, int quantity) {
+    for (var book in inventory) {
+      if (book.title == title) {
+        if (book.quantity >= quantity) {
+          book.quantity -= quantity;
+          print('Sold $quantity copies of $title.');
+          return;
+        } else {
+          print('Not enough copies of $title in stock.');
+          return;
+        }
+      }
+    }
+    print('Book not found in inventory.');
+  }
+
+  // Function to simulate restocking a certain quantity of a book
+  void restockBook(String title, int quantity) {
+    for (var book in inventory) {
+      if (book.title == title) {
+        book.quantity += quantity;
+        print('Restocked $quantity copies of $title.');
+        return;
+      }
+    }
+    print('Book not found in inventory.');
+  }
+}
+
+void main() {
+  // Create some books
+  var book1 = Book('Book Title 1', 'Author 1', 20.0, 50);
+  var book2 = Book('Book Title 2', 'Author 2', 15.0, 30);
+
+  // Create an inventory manager and add the books to inventory
+  var inventoryManager = InventoryManager();
+  inventoryManager.addBook(book1);
+  inventoryManager.addBook(book2);
+
+  // Display initial inventory
+  print('Initial Inventory:');
+  inventoryManager.displayInventory();
+  print('-----------------------');
+
+  // Sell some books
+  inventoryManager.sellBook('Book Title 1', 10);
+
+  // Restock some books
+  inventoryManager.restockBook('Book Title 2', 20);
+
+  // Display updated inventory
+  print('Updated Inventory:');
+  inventoryManager.displayInventory();
+}
